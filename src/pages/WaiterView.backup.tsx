@@ -60,7 +60,7 @@ const RequestCard = ({
 
     return (
         <div
-            className={`p-3 sm:p-4 rounded-xl border-l-4 shadow-sm transition-all transform hover:scale-[1.01] hover:shadow-md w-full max-w-full overflow-hidden ${
+            className={`p-3 sm:p-4 rounded-xl border-l-4 shadow-sm transition-all transform hover:scale-[1.01] hover:shadow-md ${
                 cardBgColor[req.status]
             }`}
         >
@@ -83,18 +83,17 @@ const RequestCard = ({
             </div>
 
             {req.notes && (
-                <div className="bg-white/50 p-2 rounded-lg mb-3 border border-orange-100 overflow-hidden">
-                    <p className="text-xs sm:text-sm text-orange-700 italic break-words whitespace-normal overflow-visible">
+                <div className="bg-white/50 p-2 rounded-lg mb-3 border border-orange-100">
+                    <p className="text-xs sm:text-sm text-orange-700 italic break-words">
                         "{req.notes}"
                     </p>
                 </div>
             )}
 
-            <div className="flex justify-between items-center text-xs gap-2 flex-wrap mt-2">
+            <div className="flex justify-between items-center text-xs gap-2">
                 <div className="text-orange-600 bg-orange-50 px-2 py-1 rounded-full flex-shrink-0">
                     <i className="far fa-clock mr-1"></i>
-                    <span className="hidden sm:inline">Hace </span>
-                    {timeAgo(req.createdAt)}
+                    <span className="hidden sm:inline">Hace </span>{timeAgo(req.createdAt)}
                 </div>
                 {req.waiterId && (
                     <span className="text-orange-700 font-medium bg-orange-50 px-2 py-1 rounded-full flex-shrink-0">
@@ -108,7 +107,9 @@ const RequestCard = ({
                     <button
                         onClick={() => onUpdate(req.id, 'EN_CAMINO')}
                         disabled={isUpdating}
-                        className={`w-full py-2 px-3 sm:px-4 rounded-lg text-white text-sm sm:text-base font-medium transition-all duration-200 transform active:scale-95 sm:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed ${buttonStyle.PENDIENTE}`}
+                        className={`w-full py-2 px-3 sm:px-4 rounded-lg text-white text-sm sm:text-base font-medium transition-all duration-200 transform active:scale-95 sm:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed ${
+                            buttonStyle.PENDIENTE
+                        }`}
                     >
                         {isUpdating ? 'Procesando...' : 'Aceptar'}
                     </button>
@@ -117,9 +118,13 @@ const RequestCard = ({
                     <button
                         onClick={() => onUpdate(req.id, 'COMPLETADO')}
                         disabled={isUpdating}
-                        className={`w-full py-2 px-3 sm:px-4 rounded-lg text-white text-sm sm:text-base font-medium transition-all duration-200 transform active:scale-95 sm:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed ${buttonStyle.EN_CAMINO}`}
+                        className={`w-full py-2 px-3 sm:px-4 rounded-lg text-white text-sm sm:text-base font-medium transition-all duration-200 transform active:scale-95 sm:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed ${
+                            buttonStyle.EN_CAMINO
+                        }`}
                     >
-                        {isUpdating ? 'Procesando...' : 'Completar'}
+                        {isUpdating
+                            ? 'Procesando...'
+                            : 'Completar'}
                     </button>
                 )}
             </div>
@@ -157,14 +162,12 @@ const RequestColumn = ({
             className={`bg-white rounded-xl shadow-sm p-3 sm:p-4 w-full h-full ${getColumnStyle()}`}
         >
             <div className="flex justify-between items-center mb-3 sm:mb-4">
-                <h2 className="text-base sm:text-lg font-bold text-gray-800">
-                    {title}
-                </h2>
+                <h2 className="text-base sm:text-lg font-bold text-gray-800">{title}</h2>
                 <span className="bg-orange-100 text-orange-800 text-xs font-semibold px-2 sm:px-3 py-1 rounded-full">
                     {requests.length}
                 </span>
             </div>
-            <div className="space-y-3 sm:space-y-4 overflow-y-auto h-[calc(100vh-200px)] sm:h-[calc(100vh-220px)] pr-1 sm:pr-2 -mx-1 px-1 w-full scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-orange-100">
+            <div className="space-y-3 sm:space-y-4 overflow-y-auto h-[calc(100vh-180px)] sm:h-[calc(100vh-220px)] pr-1 sm:pr-2">
                 {requests.length > 0 ? (
                     requests.map((req) => (
                         <RequestCard
@@ -177,9 +180,7 @@ const RequestColumn = ({
                 ) : (
                     <div className="bg-orange-50/50 border-2 border-dashed border-orange-200 rounded-xl p-4 sm:p-6 text-center">
                         <i className="fas fa-inbox text-2xl sm:text-3xl text-orange-300 mb-2"></i>
-                        <p className="text-sm sm:text-base text-orange-600">
-                            No hay peticiones
-                        </p>
+                        <p className="text-sm sm:text-base text-orange-600">No hay peticiones</p>
                     </div>
                 )}
             </div>
@@ -322,8 +323,8 @@ function WaiterView() {
                 </div>
 
                 {/* Mobile: Scroll horizontal, Desktop: Grid */}
-                <div className="flex lg:hidden overflow-x-auto gap-3 pb-6 px-1 snap-x snap-mandatory -mx-2 w-full">
-                    <div className="w-[calc(100%-1rem)] sm:w-[85vw] flex-shrink-0 snap-center">
+                <div className="flex lg:hidden overflow-x-auto gap-3 pb-4 snap-x snap-mandatory">
+                    <div className="min-w-[85vw] snap-center">
                         <RequestColumn
                             title="Pendientes"
                             requests={filteredRequests.PENDIENTE}
@@ -331,7 +332,7 @@ function WaiterView() {
                             updatingId={updatingId}
                         />
                     </div>
-                    <div className="w-[calc(100%-1rem)] sm:w-[85vw] flex-shrink-0 snap-center">
+                    <div className="min-w-[85vw] snap-center">
                         <RequestColumn
                             title="En Camino"
                             requests={filteredRequests.EN_CAMINO}
@@ -339,7 +340,7 @@ function WaiterView() {
                             updatingId={updatingId}
                         />
                     </div>
-                    <div className="w-[calc(100%-1rem)] sm:w-[85vw] flex-shrink-0 snap-center">
+                    <div className="min-w-[85vw] snap-center">
                         <RequestColumn
                             title="Completadas"
                             requests={filteredRequests.COMPLETADO}
