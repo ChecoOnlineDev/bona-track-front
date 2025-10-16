@@ -142,9 +142,7 @@ function WaiterView() {
     useEffect(() => {
         const fetchInitialRequests = async () => {
             try {
-                const response = await fetch(
-                    'http://localhost:3000/api/requests',
-                );
+                const response = await fetch('http://localhost:3000/requests');
                 const data = await response.json();
                 setRequests(data);
             } catch (error) {
